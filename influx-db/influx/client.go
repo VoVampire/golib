@@ -11,7 +11,7 @@ type Client struct {
 }
 
 func NewClient() *Client {
-	con, err := client.NewHTTPClient(HttpConfig())
+	con, err := client.NewHTTPClient(httpConfig())
 	if err != nil {
 		log.Fatal(err)
 	}
