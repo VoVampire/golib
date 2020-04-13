@@ -7,6 +7,8 @@ import (
 )
 
 func TestClient(t *testing.T) {
+	t.Skip()
+
 	db := "test"
 	name := "point"
 	tag := map[string]string{} //map[string]string{"id": "1"}

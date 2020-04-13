@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-func DefConfig() client.HTTPConfig {
+func HttpConfig() client.HTTPConfig {
 	cfg := client.HTTPConfig{
 		Addr:     os.Getenv("INFLUX_ADDR"),
 		Username: os.Getenv("INFLUX_USER"),
