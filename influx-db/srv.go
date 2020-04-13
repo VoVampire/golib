@@ -2,7 +2,6 @@ package inf
 
 import (
 	client "github.com/influxdata/influxdb1-client/v2"
-	"goutils/influx-db/influx"
 	"log"
 )
 
@@ -24,7 +23,7 @@ func (*mockClient) Write(string, string, map[string]string, map[string]interface
 func (*mockClient) Query(string, string) (*client.Response, error)                        { return nil, nil }
 
 func init() {
-	c = influx.NewClient()
+	//c = influx.NewClient()
 	c = &mockClient{}
 }
 
