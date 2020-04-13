@@ -3,7 +3,7 @@ package inf
 import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
-	"newgitlab.com/blockchain/gmslib/influxdbtool/tool/influx"
+	"goutils/influx-db/influx"
 	"testing"
 )
 
