@@ -1,8 +1,8 @@
 package inf
 
 import (
-	client "github.com/influxdata/influxdb1-client/v2"
-	"goutils/influx-db/influx"
+	"github.com/influxdata/influxdb1-client/v2"
+	. "goutils/influx/client"
 	"log"
 	"os"
 )
@@ -27,8 +27,9 @@ func (*mockClient) Query(string, string) (*client.Response, error)              
 func init() {
 	c = &mockClient{}
 	if os.Getenv("INFLUX_ADDR") != "" {
-		c = influx.NewClient()
+		c = NewClient()
 	}
+	InitDB(DbName)
 }
 
 // if exists, do nothing and does not return an error
