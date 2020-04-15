@@ -3,14 +3,14 @@ package inf
 import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
-	"goutils/influx-db/influx"
+	"goutils/influx/client"
 	"testing"
 )
 
 func TestPoint(t *testing.T) {
 	t.Skip()
 
-	c = influx.NewClient()
+	c = client.NewClient()
 	InitDB(DbName)
 
 	Point(DemoName, 1)
@@ -25,7 +25,7 @@ func BenchmarkPoint(b *testing.B) {
 
 	b.StopTimer()
 
-	c = influx.NewClient()
+	c = client.NewClient()
 	InitDB(DbName)
 
 	b.StartTimer()
