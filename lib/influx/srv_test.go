@@ -3,7 +3,7 @@ package inf
 import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
-	"goutils/influx/client"
+	"goutils/lib/influx/client"
 	"testing"
 )
 

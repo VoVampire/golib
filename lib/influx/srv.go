@@ -2,7 +2,7 @@ package inf
 
 import (
 	"github.com/influxdata/influxdb1-client/v2"
-	. "goutils/influx/client"
+	. "goutils/lib/influx/client"
 	"log"
 	"os"
 )
