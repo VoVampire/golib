@@ -12,8 +12,8 @@ func SafeQuit(quitFunc func()) {
 
 	for {
 		select {
-		case <-ch:
-			switch <-ch {
+		case s := <-ch:
+			switch s {
 			case syscall.SIGHUP:
 			case syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT:
 				quitFunc()
