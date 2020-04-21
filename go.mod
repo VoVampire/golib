@@ -1,4 +1,4 @@
-module goutils
+module golib
 
 go 1.14
 
