@@ -1,4 +1,4 @@
-package safe_quit
+package exit
 
 import (
 	"os"
