@@ -3,7 +3,7 @@ package inf
 import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
-	"golib/lib/influx/client"
+	"golib/lib/db/influx/client"
 	"testing"
 )
 

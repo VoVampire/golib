@@ -1,4 +1,4 @@
-package token
+package jwt
 
 import (
 	"github.com/stretchr/testify/assert"

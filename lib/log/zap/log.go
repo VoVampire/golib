@@ -1,6 +1,6 @@
 // 文档：https://www.godoc.org/go.uber.org/zap
 
-package log
+package zap
 
 import (
 	"github.com/natefinch/lumberjack"
