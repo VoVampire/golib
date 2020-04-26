@@ -32,14 +32,14 @@ func NewMysql(c *Conf) *gorm.DB {
 	return db
 }
 
-func NewExample() *gorm.DB {
+func NewExample(dbname string) *gorm.DB {
 	user, _ := ioutil.ReadFile("/mysql.usr")
 	usr := strings.TrimSpace(string(user))
 
 	password, _ := ioutil.ReadFile("/mysql.pwd")
 	pwd := strings.TrimSpace(string(password))
 
-	conn := fmt.Sprintf("%s:%s@/gadmin_test?charset=utf8&parseTime=True&loc=Local", usr, pwd)
+	conn := fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True&loc=Local", usr, pwd, dbname)
 	db, err := gorm.Open("mysql", conn)
 	if err != nil {
 		panic(err)
