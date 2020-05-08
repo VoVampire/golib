@@ -1,5 +1,5 @@
-//参考：https://my.oschina.net/bravozu/blog/1827254
-
+//参考1：https://huzb.me/2018/03/23/%E7%AE%80%E5%8D%95%E7%9A%84%E5%AF%86%E7%A0%81%E5%AD%A6%E7%94%9F%E6%88%90%E5%94%AF%E4%B8%80%E9%82%80%E8%AF%B7%E7%A0%81/
+//参考2：https://my.oschina.net/bravozu/blog/1827254
 package code
 
 const (
