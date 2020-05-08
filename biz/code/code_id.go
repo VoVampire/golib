@@ -3,90 +3,104 @@
 package code
 
 const (
-	CHARSLENGTH = 32    // 字符集长度
-	CODELENGTH  = 7     // 码长度
-	PRIME1      = 3     // 质数1
-	PRIME2      = 5     // 质数2
-	SLAT        = 12345 // 随机数
+	chars   = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	codeLen = 7     // 码长度
+	slat    = 12345 // 随机数 - 用于扩大ID
+	prime1  = 3     // 质数1 - 用于加密ID
+	prime2  = 5     // 质数2 - 用于混淆码 (选择与code长度互质的数)
+	prime3  = 17    // 质数3 - 用于混淆字符集 (选择与chars长度互质的数)
+
+	//混淆其实就是将数字洗牌。比如把 1234567 洗成 5237641。
+	//这样处理之后可以隐藏密钥和密文之间的关系。
+	//洗牌的方式也很简单，选择一个和数组长度互质的数 prime2，和数组角标相乘取余即可
 )
 
-var CHARS = []byte{'2', '3', '4', '5', '6', '9', '7', '8', 'A', 'B',
-	'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q',
-	'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'}
+var (
+	_chars    []byte
+	_charsMap map[byte]int
+	_charsLen int
+)
 
-var CHARSMAP = map[byte]int{
-	'2': 0, '3': 1, '4': 2, '5': 3, '6': 4, '9': 5, '7': 6, '8': 7,
-	'A': 8, 'B': 9, 'C': 10, 'D': 11, 'E': 12, 'F': 13, 'G': 14,
-	'H': 15, 'J': 16, 'K': 17, 'L': 18, 'M': 19, 'N': 20, 'P': 21,
-	'Q': 22, 'R': 23, 'S': 24, 'T': 25, 'U': 26, 'V': 27, 'W': 28,
-	'X': 29, 'Y': 30, 'Z': 31}
+func init() {
+	_charsLen = len(chars)
+
+	_chars = make([]byte, _charsLen)
+	for i := 0; i < _charsLen; i++ {
+		_chars[i] = chars[i*prime3%_charsLen]
+	}
+
+	_charsMap = make(map[byte]int)
+	for i, v := range _chars {
+		_charsMap[v] = i
+	}
+}
 
 func Encode(id int) string {
 	//补位，并扩大整体
-	id = id*PRIME1 + SLAT
+	id = id*prime1 + slat
 
 	//将 id 转换成32进制的值
-	var a = make([]int, CODELENGTH)
+	var a = make([]int, codeLen)
 
 	//32进制数
 	a[0] = id
-	for i := int(0); i < CODELENGTH-1; i++ {
-		a[i+1] = a[i] / CHARSLENGTH
+	for i := int(0); i < codeLen-1; i++ {
+		a[i+1] = a[i] / _charsLen
 		//扩大每一位的差异
-		a[i] = (a[i] + i*a[0]) % CHARSLENGTH
+		a[i] = (a[i] + i*a[0]) % _charsLen
 	}
 
 	// 校验位
 	sum := 0
-	for i := 0; i < CODELENGTH-1; i++ {
+	for i := 0; i < codeLen-1; i++ {
 		sum += a[i]
 	}
-	a[CODELENGTH-1] = sum * PRIME1 % CHARSLENGTH
+	a[codeLen-1] = sum * prime1 % _charsLen
 
 	//进行混淆
-	var b = make([]byte, CODELENGTH)
-	for i := 0; i < CODELENGTH; i++ {
-		b[i] = CHARS[a[i*PRIME2%CODELENGTH]]
+	var b = make([]byte, codeLen)
+	for i := 0; i < codeLen; i++ {
+		b[i] = _chars[a[i*prime2%codeLen]]
 	}
 
 	return string(b)
 }
 
 func Decode(code string) int {
-	if len(code) != CODELENGTH {
+	if len(code) != codeLen {
 		return -1
 	}
 
 	//将字符还原成对应数字
-	var a = make([]int, CODELENGTH)
-	for i := 0; i < CODELENGTH; i++ {
-		index, ok := CHARSMAP[code[i]]
+	var a = make([]int, codeLen)
+	for i := 0; i < codeLen; i++ {
+		index, ok := _charsMap[code[i]]
 		if !ok {
 			return -1
 		}
-		a[i*PRIME2%CODELENGTH] = index
+		a[i*prime2%codeLen] = index
 	}
 
 	// 校验位
 	sum := 0
-	for i := 0; i < CODELENGTH-1; i++ {
+	for i := 0; i < codeLen-1; i++ {
 		sum += a[i]
 	}
-	if a[CODELENGTH-1] != sum*PRIME1%CHARSLENGTH {
+	if a[codeLen-1] != sum*prime1%_charsLen {
 		return -1
 	}
 
-	var b = make([]int, CODELENGTH)
-	for i := CODELENGTH - 2; i >= 0; i-- {
-		b[i] = (a[i] - a[0]*i + CHARSLENGTH*i) % CHARSLENGTH
+	var b = make([]int, codeLen)
+	for i := codeLen - 2; i >= 0; i-- {
+		b[i] = (a[i] - a[0]*i + _charsLen*i) % _charsLen
 	}
 
 	var res int
-	for i := CODELENGTH - 2; i >= 0; i-- {
+	for i := codeLen - 2; i >= 0; i-- {
 		res += b[i]
 		if i > 0 {
-			res *= CHARSLENGTH
+			res *= _charsLen
 		}
 	}
-	return (res - SLAT) / PRIME1
+	return (res - slat) / prime1
 }

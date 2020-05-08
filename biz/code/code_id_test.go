@@ -9,7 +9,7 @@ func TestEncode(t *testing.T) {
 	var m = map[string]bool{}
 	for i := 1; i < max; i++ {
 		code := Encode(i)
-		if len(code) != CODELENGTH {
+		if len(code) != codeLen {
 			t.Error("len(code) error", i)
 			break
 		}
