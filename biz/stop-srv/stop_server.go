@@ -1,4 +1,4 @@
-package exit
+package stop_srv
 
 import (
 	"os"
@@ -6,7 +6,7 @@ import (
 	"syscall"
 )
 
-func SafeQuit(quitFunc func()) {
+func SafelyStopServer(quitFunc func()) {
 	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, syscall.SIGHUP, syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT)
 
