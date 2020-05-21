@@ -16,7 +16,7 @@ func TestSort(t *testing.T) {
 		&Selection{},
 		&Bubble{},
 	} {
-		arr := doSort(v.Name, v.Sort, ascArr())
+		arr := doSort(v.Name, v.Sort, randArr())
 		assert.True(t, isSorted(arr))
 	}
 }

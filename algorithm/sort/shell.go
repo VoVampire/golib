@@ -13,7 +13,7 @@ func (s *Shell) Sort(a []int) {
 		h = 3*h + 1
 	}
 
-	for ; h >= 1; h = h / 3 {
+	for ; h >= 1; h /= 3 {
 		for i := h; i < l; i++ {
 			for j := i; j >= h && s.less(a[j], a[j-h]); j -= h {
 				s.swap(&a[j], &a[j-h])
