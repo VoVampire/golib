@@ -11,10 +11,14 @@ import (
 func TestSort(t *testing.T) {
 	rand.Seed(time.Now().Unix())
 	for _, v := range []Sorter{
-		&Shell{},
-		&Insertion{},
-		&Selection{},
-		&Bubble{},
+		//&GoSort{},
+		//&Shell{},
+		//&Insertion{},
+		//&Selection{},
+		//&Bubble{},
+		//&Bubble2{},
+		//&Quick{},
+		&Quick2{},
 	} {
 		arr := doSort(v.Name, v.Sort, randArr())
 		assert.True(t, isSorted(arr))

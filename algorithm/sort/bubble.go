@@ -17,8 +17,14 @@ func (s *Bubble) Sort(a []int) {
 	}
 }
 
-// 优化：提前终止
-func (s *Bubble) Sort2(a []int) {
+type Bubble2 struct{ sorter }
+
+func (s *Bubble2) Name() string {
+	return "bubble-2"
+}
+
+// 提前终止
+func (s *Bubble2) Sort(a []int) {
 	l := len(a)
 	swapped := true
 	for i := 0; swapped; i++ {
