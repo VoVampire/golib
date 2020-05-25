@@ -40,32 +40,22 @@ func (q *Quick2) Sort(data []int) {
 func (q *Quick2) sort(data []int, head, tail int) {
 	if head < tail {
 		mid := q.partition(data, head, tail)
-		q.sort(data, head, mid)
+		q.sort(data, head, mid-1)
 		q.sort(data, mid+1, tail)
 	}
 }
 
-// todo fix error
 func (q *Quick2) partition(data []int, head, tail int) int {
 	mid := data[head]
 	for i := head + 1; i <= tail; {
-		for i < tail && data[i] <= mid {
+		if data[i] > mid {
+			data[i], data[tail] = data[tail], data[i]
+			tail--
+		} else {
+			data[i], data[head] = data[head], data[i]
+			head++
 			i++
 		}
-		if i == tail {
-			break
-		}
-		data[i], data[head] = data[head], data[i]
-		head = i
-
-		for i < tail && data[tail] >= mid {
-			tail--
-		}
-		if i == tail {
-			break
-		}
-
-		data[i], data[tail] = data[tail], data[i]
 	}
 	data[head] = mid
 	return head
