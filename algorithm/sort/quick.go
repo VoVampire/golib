@@ -60,3 +60,33 @@ func (q *Quick2) partition(data []int, head, tail int) int {
 	data[head] = mid
 	return head
 }
+
+type QuickInsertion struct {
+	Insertion
+}
+
+func (q *QuickInsertion) Name() string {
+	return "quick-ins"
+}
+
+func (q *QuickInsertion) Sort(data []int) {
+	if len(data) <= 15 {
+		q.Insertion.Sort(data)
+		return
+	}
+	mid := data[0]
+	head, tail := 0, len(data)-1
+	for i := 1; i <= tail; {
+		if data[i] > mid {
+			data[i], data[tail] = data[tail], data[i]
+			tail--
+		} else {
+			data[i], data[head] = data[head], data[i]
+			head++
+			i++
+		}
+	}
+	data[head] = mid
+	q.Sort(data[:head])
+	q.Sort(data[head+1:])
+}

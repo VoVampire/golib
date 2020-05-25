@@ -11,14 +11,15 @@ import (
 func TestSort(t *testing.T) {
 	rand.Seed(time.Now().Unix())
 	for _, v := range []Sorter{
-		//&GoSort{},
-		//&Shell{},
-		//&Insertion{},
-		//&Selection{},
-		//&Bubble{},
-		//&Bubble2{},
-		//&Quick{},
+		&GoSort{},
+		&Shell{},
+		&Quick{},
 		&Quick2{},
+		&QuickInsertion{},
+		&Insertion{},
+		&Selection{},
+		&Bubble{},
+		&Bubble2{},
 	} {
 		arr := doSort(v.Name, v.Sort, randArr())
 		assert.True(t, isSorted(arr))
@@ -29,7 +30,7 @@ func doSort(name func() string, fn func([]int), a []int) []int {
 	fmt.Printf("%-10s: ", name())
 	now := time.Now()
 	fn(a)
-	fmt.Println(time.Now().Sub(now).Microseconds())
+	fmt.Println(time.Now().Sub(now).Microseconds(), "μs")
 	return a
 }
 
