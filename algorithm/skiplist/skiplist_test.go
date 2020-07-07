@@ -1,18 +1,22 @@
 package skiplist
 
 import (
-	"encoding/json"
-	"fmt"
+	//"github.com/sanity-io/litter"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-func TestZSkipList_Insert(t *testing.T) {
-	zsl := Create()
-	zsl.Insert(100, "1")
-	zsl.Insert(200, "2")
-	bts, err := json.Marshal(zsl)
-	assert.NoError(t, err)
-	fmt.Println(string(bts))
-	//fmt.Println(jsoniter.MarshalToString(zsl))
+func TestZSkipList(t *testing.T) {
+	zsl := ZslCreate()
+	zsl.ZslInsert(100, "1")
+	zsl.ZslInsert(200, "2")
+	zsl.ZslInsert(300, "3")
+	x := zsl.ZslQuery(200, "2")
+	assert.NotEmpty(t, x)
+
+	assert.Equal(t, 1, zsl.ZslDelete(200, "2"))
+	assert.Equal(t, 0, zsl.ZslDelete(200, "2"))
+
+	x = zsl.ZslQuery(200, "2")
+	assert.Empty(t, x)
 }

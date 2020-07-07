@@ -20,12 +20,6 @@ func zslRandomLevel() int {
 	return level
 }
 
-type Api interface {
-	Query(ele string)
-	Insert(score float64, ele string) *zSkipListNode
-	Delete(ele string)
-}
-
 // SkipList
 type zSkipList struct {
 	Header, Tail *zSkipListNode
@@ -43,7 +37,7 @@ type zSkipListLevel struct {
 	Span    uint64
 }
 
-func Create() *zSkipList {
+func ZslCreate() *zSkipList {
 	sln := zSkipListNode{}
 	sln.Level = make([]*zSkipListLevel, SKIPLIST_MAXLEVEL)
 	for i := 0; i < SKIPLIST_MAXLEVEL; i++ {
@@ -56,11 +50,7 @@ func Create() *zSkipList {
 	return &sl
 }
 
-func (zsl *zSkipList) Query(ele string) {
-	panic("implement me")
-}
-
-func (zsl *zSkipList) Insert(score float64, ele string) *zSkipListNode {
+func (zsl *zSkipList) ZslInsert(score float64, ele string) *zSkipListNode {
 	var update [SKIPLIST_MAXLEVEL]*zSkipListNode // 插入节点时，需要更新被插入节点每层的前一个节点
 	var rank [SKIPLIST_MAXLEVEL]uint64           // 记录当前层从header节点到update[i]节点所经历的步长
 
@@ -120,9 +110,58 @@ func (zsl *zSkipList) Insert(score float64, ele string) *zSkipListNode {
 
 	zsl.Length++
 	return x
-
 }
 
-func (zsl *zSkipList) Delete(ele string) {
-	panic("implement me")
+func (zsl *zSkipList) ZslQuery(score float64, ele string) *zSkipListNode {
+	x := zsl.Header
+	for i := zsl.Level - 1; i >= 0; i-- {
+		for x.Level[i].Forward != nil &&
+			(x.Level[i].Forward.Score < score ||
+				(x.Level[i].Forward.Score == score &&
+					x.Level[i].Forward.Ele < ele)) {
+			x = x.Level[i].Forward
+		}
+	}
+	if x = x.Level[0].Forward; x != nil && x.Score == score && x.Ele == ele {
+		return x
+	}
+	return nil
+}
+
+func (zsl *zSkipList) ZslDelete(score float64, ele string) int {
+	var update [SKIPLIST_MAXLEVEL]*zSkipListNode // 插入节点时，需要更新被插入节点每层的前一个节点
+
+	x := zsl.Header
+	for i := zsl.Level - 1; i >= 0; i-- {
+		for x.Level[i].Forward != nil &&
+			(x.Level[i].Forward.Score < score ||
+				(x.Level[i].Forward.Score == score &&
+					x.Level[i].Forward.Ele < ele)) {
+			x = x.Level[i].Forward
+		}
+		update[i] = x
+	}
+
+	if x = x.Level[0].Forward; x != nil && x.Score == score && x.Ele == ele {
+		for i := 0; i < zsl.Level; i++ {
+			if update[i].Level[i].Forward == x {
+				update[i].Level[i].Span += x.Level[i].Span - 1
+				update[i].Level[i].Forward = x.Level[i].Forward
+			} else {
+				update[i].Level[i].Span -= 1
+			}
+		}
+		if x.Level[0].Forward != nil{
+			x.Level[0].Forward.Backward = x.Backward
+		} else {
+			zsl.Tail = x.Backward
+		}
+		for zsl.Level > 1 && zsl.Header.Level[zsl.Level-1].Forward == nil{
+			zsl.Level--
+		}
+
+		zsl.Length--
+		return 1
+	}
+	return 0 /* not found */
 }
