@@ -129,7 +129,7 @@ func (zsl *zSkipList) ZslQuery(score float64, ele string) *zSkipListNode {
 }
 
 func (zsl *zSkipList) ZslDelete(score float64, ele string) int {
-	var update [SKIPLIST_MAXLEVEL]*zSkipListNode // 插入节点时，需要更新被插入节点每层的前一个节点
+	var update [SKIPLIST_MAXLEVEL]*zSkipListNode // 删除节点时，需要更新被插入节点每层的前一个节点
 
 	x := zsl.Header
 	for i := zsl.Level - 1; i >= 0; i-- {
