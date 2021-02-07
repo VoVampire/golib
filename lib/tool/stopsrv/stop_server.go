@@ -1,4 +1,4 @@
-package stop_srv
+package stopsrv
 
 import (
 	"os"
